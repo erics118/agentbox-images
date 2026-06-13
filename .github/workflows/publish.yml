@@ -12,6 +12,14 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - context: claude
+            package: agentbox-claude
+          - context: codex
+            package: agentbox-codex
 
     steps:
       - uses: actions/checkout@v6
@@ -28,9 +36,9 @@ jobs:
 
       - uses: docker/build-push-action@v7
         with:
-          context: .
+          context: ./${{ matrix.context }}
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/erics118/agentbox-claude-code:latest
-            ghcr.io/erics118/agentbox-claude-code:${{ github.sha }}
+            ghcr.io/erics118/${{ matrix.package }}:latest
+            ghcr.io/erics118/${{ matrix.package }}:${{ github.sha }}

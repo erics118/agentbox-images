@@ -1,21 +1,21 @@
-# agentbox-claude-code
+# agentbox-images
 
-Prebuilt Claude Code image for `agentbox`
+Prebuilt coding-agent images for `agentbox`
 
-## Build
+| Agent       | Image                              |
+| ----------- | ---------------------------------- |
+| Claude Code | `ghcr.io/erics118/agentbox-claude` |
+| Codex       | `ghcr.io/erics118/agentbox-codex`  |
+
+Images are published for `linux/amd64` and `linux/arm64` on every push to
+`main`, tagged with both `latest` and the Git commit SHA.
+
+## Local builds
 
 ```bash
-docker build -t ghcr.io/erics118/agentbox-claude-code:latest .
-
-## Push
-
-echo "$GITHUB_TOKEN" | docker login ghcr.io -u erics118 --password-stdin
-docker push ghcr.io/erics118/agentbox-claude-code:latest
-
-## agentbox config
-
-[agent.claude-code]
-base_image = "ghcr.io/erics118/agentbox-claude-code:latest"
-install = ""
-install_hosts = []
+docker build -t agentbox-claude ./claude
+docker build -t agentbox-codex ./codex
 ```
+
+Each image declares the unprivileged `node` user. Agent configuration and login
+state therefore live under `/home/node` in the persistent smolvm machine.
